@@ -7,7 +7,6 @@ package main
 //go:generate protoc --go_out=./ --go-grpc_out=./ --proto_path=../../pb ../../pb/demo.proto
 //go:generate go install github.com/open-feature/cli/cmd/openfeature@v0.4.0
 //go:generate openfeature generate -o flags --package-name flags go
-
 import (
 	"context"
 	"database/sql"
