@@ -46,7 +46,7 @@ func CreateKafkaProducer(brokers []string, logger *slog.Logger) (sarama.AsyncPro
 
 	// Sarama has an issue in a single broker kafka if the kafka broker is restarted.
 	// This setting is to prevent that issue from manifesting itself, but may swallow failed messages.
-	saramaConfig.Producer.RequiredAcks = sarama.NoResponse
+saramaConfig.Producer.RequiredAcks = sarama.WaitForAll
 
 	saramaConfig.Version = ProtocolVersion
 
