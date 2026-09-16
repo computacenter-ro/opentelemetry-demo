@@ -42,8 +42,6 @@ module.exports.charge = async request => {
     if (numberVariant > 0) {
       // n% chance to fail with demo.user_context.loyalty_level=gold
       if (Math.random() < numberVariant) {
-        span.setAttributes({'demo.user_context.loyalty_level': 'gold' });
-
         throw new Error('Payment request failed. Invalid token. demo.user_context.loyalty_level=gold');
       }
     }
@@ -61,12 +59,9 @@ module.exports.charge = async request => {
     const card = cardValidator(number);
     const { card_type: cardType, valid } = card.getCardDetails();
 
-    const loyalty_level = random(LOYALTY_LEVEL);
-
     span.setAttributes({
       'demo.payment.card_type': cardType,
-      'demo.payment.card_valid': valid,
-      'demo.user_context.loyalty_level': loyalty_level
+      'demo.payment.card_valid': valid
     });
 
     if (!valid) {
@@ -94,7 +89,7 @@ module.exports.charge = async request => {
     }
 
     const { units, nanos, currencyCode } = request.amount;
-    logger.info({ transactionId, cardType, lastFourDigits, amount: { units, nanos, currencyCode }, loyalty_level }, 'Transaction complete.');
+    logger.info({ transactionId, cardType, lastFourDigits, amount: { units, nanos, currencyCode } }, 'Transaction complete.');
     transactionsCounter.add(1, { 'demo.payment.currency': currencyCode });
 
     return { transactionId };
