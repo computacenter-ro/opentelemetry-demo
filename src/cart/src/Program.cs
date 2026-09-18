@@ -59,9 +59,9 @@ builder.Services.AddOpenFeature(openFeatureBuilder =>
 builder.Services.AddSingleton(x =>
     new CartService(
         x.GetRequiredService<ICartStore>(),
-        new ValkeyCartStore(x.GetRequiredService<ILogger<ValkeyCartStore>>(), "badhost:1234"),
+        new ValkeyCartStore(x.GetRequiredService<ILogger<ValkeyCartStore>>(), "validhost:5678"),
         x.GetRequiredService<IFeatureClient>()
-));
+    ));
 
 
 var serviceInstanceId = Guid.NewGuid().ToString();
