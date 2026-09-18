@@ -175,7 +175,7 @@ public final class AdService {
      * @param responseObserver the stream observer which gets notified with the value of {@code
      *     AdResponse}
      */
-    @Override
+@Override
     public void getAds(AdRequest req, StreamObserver<AdResponse> responseObserver) {
       AdService service = AdService.getInstance();
 
@@ -233,11 +233,6 @@ public final class AdService {
             1,
             Attributes.of(
                 adRequestTypeKey, adRequestType.name(), adResponseTypeKey, adResponseType.name()));
-
-        // Throw 1/10 of the time to simulate a failure when the feature flag is enabled
-        if (ffClient.getBooleanValue(AD_FAILURE, false, evaluationContext) && random.nextInt(10) == 0) {
-          throw new StatusRuntimeException(Status.UNAVAILABLE);
-        }
 
         if (ffClient.getBooleanValue(AD_MANUAL_GC_FEATURE_FLAG, false, evaluationContext)) {
           logger.warn("Feature Flag " + AD_MANUAL_GC_FEATURE_FLAG + " enabled, performing a manual gc now");
