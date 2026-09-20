@@ -97,6 +97,8 @@ internal class Consumer : BackgroundService
             {
                 Id = order.OrderId
             };
+            var existingOrder = dbContext.Orders.Find(order.OrderId);
+            if (existingOrder != null) return; // Return early if order exists
             dbContext.Add(orderEntity);
             foreach (var item in order.Items)
             {
