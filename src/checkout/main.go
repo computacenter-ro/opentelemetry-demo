@@ -352,7 +352,7 @@ func (cs *checkout) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (
 
 	txID, err := cs.chargeCard(ctx, total, req.CreditCard)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "failed to charge card: %+v", err)
+		return nil, status.Errorf(codes.Unavailable, "payment service is unreachable: %+v", err)
 	}
 
 	span.AddEvent("charged",
@@ -365,7 +365,7 @@ func (cs *checkout) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (
 
 	shippingTrackingID, err := cs.shipOrder(ctx, req.Address, prep.cartItems)
 	if err != nil {
-		return nil, status.Errorf(codes.Unavailable, "shipping error: %+v", err)
+		return nil, status.Errorf(codes.Unavailable, "shipping service is unreachable: %+v", err)
 	}
 	shippingTrackingAttribute := attribute.String("demo.shipping.tracking.id", shippingTrackingID)
 	span.AddEvent("shipped", trace.WithAttributes(shippingTrackingAttribute))
