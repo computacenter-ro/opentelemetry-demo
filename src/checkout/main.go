@@ -349,7 +349,7 @@ func (cs *checkout) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (
 	}
 	total = money.Must(money.Sum(total, prep.shippingCostLocalized))
 	for _, it := range prep.orderItems {
-		multPrice := money.MultiplySlow(it.Cost, uint32(it.GetItem().GetQuantity()))
+		multPrice := money.Multiply(it.Cost, uint32(it.GetItem().GetQuantity()))
 		total = money.Must(money.Sum(total, multPrice))
 	}
 
@@ -366,7 +366,7 @@ func (cs *checkout) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (
 		slog.String("transaction_id", txID),
 	)
 
-	shippingTrackingID, err := cs.shipOrder(ctx, req.Address, prep.cartItems)
+	shippingTrackingID, err := cs.shipOrderWithNewMethod(ctx, req.Address, prep.cartItems)
 	if err != nil {
 		return nil, status.Errorf(codes.Unavailable, "shipping error: %+v", err)
 	}
@@ -376,11 +376,11 @@ func (cs *checkout) PlaceOrder(ctx context.Context, req *pb.PlaceOrderRequest) (
 	_ = cs.emptyUserCart(ctx, req.UserId)
 
 	orderResult := &pb.OrderResult{
-		OrderId:            orderID.String(),
+		OrderId: orderID.String(),
 		ShippingTrackingId: shippingTrackingID,
-		ShippingCost:       prep.shippingCostLocalized,
-		ShippingAddress:    req.Address,
-		Items:              prep.orderItems,
+		ShippingCost: prep.shippingCostLocalized,
+		ShippingAddress: req.Address,
+		Items: prep.orderItems,
 	}
 
 	shippingCostFloat, _ := strconv.ParseFloat(fmt.Sprintf("%d.%02d", prep.shippingCostLocalized.GetUnits(), prep.shippingCostLocalized.GetNanos()/10000000), 64)
