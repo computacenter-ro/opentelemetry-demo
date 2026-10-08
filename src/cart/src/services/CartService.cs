@@ -79,15 +79,7 @@ public class CartService : Oteldemo.CartService.CartServiceBase
 
         try
         {
-            var cartFailureRate = await _featureFlagHelper.GetDoubleValueAsync("cartFailure", 0);
-            if (cartFailureRate > 0 && Random.Shared.NextDouble() < cartFailureRate)
-            {
-                await _badCartStore.EmptyCartAsync(request.UserId);
-            }
-            else
-            {
-                await _cartStore.EmptyCartAsync(request.UserId);
-            }
+            await _cartStore.EmptyCartAsync(request.UserId);
         }
         catch (RpcException ex)
         {
