@@ -201,8 +201,6 @@ public final class AdService {
           logger.info("no baggage found in context");
         }
 
-        CPULoad cpuload = CPULoad.getInstance();
-        cpuload.execute(ffClient.getBooleanValue(AD_HIGH_CPU_FEATURE_FLAG, false, evaluationContext));
 
         span.setAttribute("demo.ad.context_keys", req.getContextKeysList().toString());
         span.setAttribute("demo.ad.context_keys.count", req.getContextKeysCount());
@@ -239,11 +237,6 @@ public final class AdService {
           throw new StatusRuntimeException(Status.UNAVAILABLE);
         }
 
-        if (ffClient.getBooleanValue(AD_MANUAL_GC_FEATURE_FLAG, false, evaluationContext)) {
-          logger.warn("Feature Flag " + AD_MANUAL_GC_FEATURE_FLAG + " enabled, performing a manual gc now");
-          GarbageCollectionTrigger gct = new GarbageCollectionTrigger();
-          gct.doExecute();
-        }
 
         AdResponse reply = AdResponse.newBuilder().addAllAds(allAds).build();
         responseObserver.onNext(reply);
