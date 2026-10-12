@@ -93,11 +93,12 @@ internal class Consumer : BackgroundService
             }
 
             using var dbContext = new DBContext();
-            var orderEntity = new OrderEntity
+            var orderInserted = dbContext.Database.ExecuteSqlInterpolated(
+                $"INSERT INTO orders (id) VALUES ({order.OrderId}) ON CONFLICT (id) DO NOTHING");
+            if (orderInserted == 0)
             {
-                Id = order.OrderId
-            };
-            dbContext.Add(orderEntity);
+                return;
+            }
             foreach (var item in order.Items)
             {
                 var orderItem = new OrderItemEntity
