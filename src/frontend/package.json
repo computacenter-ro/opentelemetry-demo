@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.15.0",
-    "@grpc/grpc-js": "1.14.4",
+    "@grpc/grpc-js": "1.14.6",
     "@openfeature/flagd-provider": "0.16.1",
     "@openfeature/flagd-web-provider": "0.7.4",
     "@openfeature/react-sdk": "1.4.1",
@@ -44,11 +44,11 @@
     "currency-symbol-map": "5.1.0",
     "dotenv": "17.4.2",
     "dotenv-expand": "1000.0.0",
-    "next": "16.3.5",
+    "next": "16.4.0",
     "pino": "^10.3.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "styled-components": "6.5.3",
     "uuid": "14.0.2"
   },
