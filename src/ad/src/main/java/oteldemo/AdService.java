@@ -202,7 +202,11 @@ public final class AdService {
         }
 
         CPULoad cpuload = CPULoad.getInstance();
-        cpuload.execute(ffClient.getBooleanValue(AD_HIGH_CPU_FEATURE_FLAG, false, evaluationContext));
+        try {
+          cpuload.execute(ffClient.getBooleanValue(AD_HIGH_CPU_FEATURE_FLAG, false, evaluationContext));
+        } catch (Exception e) {
+          logger.warn("Timeout while fetching the feature flag for AD_HIGH_CPU_FEATURE_FLAG, falling back to default.", e);
+        }
 
         span.setAttribute("demo.ad.context_keys", req.getContextKeysList().toString());
         span.setAttribute("demo.ad.context_keys.count", req.getContextKeysCount());
