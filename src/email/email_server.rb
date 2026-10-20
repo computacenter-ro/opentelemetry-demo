@@ -78,11 +78,8 @@ def send_email(data)
       via:      :test
     )
 
-    # If not clearing the deliveries, the emails will accumulate in the test mailer
-    # We use this to create a memory leak.
-    if memory_leak_multiplier < 1
-      Mail::TestMailer.deliveries.clear
-    end
+    # Clearing the deliveries to prevent accumulation in the test mailer
+    Mail::TestMailer.deliveries.clear
 
     span.set_attribute("demo.order.id", data.order.order_id)
     $logger.on_emit(
